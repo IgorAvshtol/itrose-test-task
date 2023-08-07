@@ -1,64 +1,63 @@
-function findDistance(s, r) {
-  const dx = s.x - r.x;
-  const dy = s.y - r.y;
-  const dz = s.z - r.z;
-  return Math.sqrt(dx * dx + dy * dy + dz * dz);
-}
+function optimizeToMinDistance(sx, sy, sz) {
+  const initData = {
+    search_points: [],
+    bestDistance: Number.MAX_VALUE,
+    random_point: { x: 0, y: 0, z: 0 },
+    calls: 0,
+  };
 
-function findRandomPoint() {
-  const maxRange = 100;
-  let currentPoint = { x: getRandomInt(maxRange), y: getRandomInt(maxRange), z: getRandomInt(maxRange) };
-  let iterations = 1;
+  //Генерируем случайные координаты для точки r
+  let rx = Math.floor(Math.random() * 101);
+  let ry = Math.floor(Math.random() * 101);
+  let rz = Math.floor(Math.random() * 101);
 
-  while (iterations <= 100) {
-    const step = Math.floor(maxRange / 2 / iterations);
-    let bestDistance = findDistance(currentPoint, currentPoint);
-    let bestPoint = currentPoint;
+  while (true) {
+    //Вычисляем расстояние между точками s и r
+    const distance = Math.sqrt((rx - sx) ** 2 + (ry - sy) ** 2 + (rz - sz) ** 2);
 
-    for (let dx = -1; dx <= 1; dx++) {
-      for (let dy = -1; dy <= 1; dy++) {
-        for (let dz = -1; dz <= 1; dz++) {
-          const newPoint = {
-            x: currentPoint.x + dx * step,
-            y: currentPoint.y + dy * step,
-            z: currentPoint.z + dz * step,
-          };
-          const newDistance = findDistance(newPoint, newPoint);
+    //Добавляем координаты точки в массив
+    initData.search_points.push({ x: rx, y: ry, z: rz });
 
-          if (newDistance < bestDistance) {
-            bestDistance = newDistance;
-            bestPoint = newPoint;
-          }
-        }
-      }
-    }
+    //Увеличиваем количество вызовов функции f
+    initData.calls++;
 
-    if (bestDistance >= findDistance(currentPoint, currentPoint)) {
+    //Если расстояние не уменьшается, прекращаем оптимизацию
+    if (distance >= initData.bestDistance) {
       break;
     }
 
-    currentPoint = bestPoint;
-    iterations++;
+    //Обновляем наименьшее расстояние и координаты точки, если нашли лучшую точку
+    initData.bestDistance = distance;
+    initData.random_point = { x: rx, y: ry, z: rz };
+
+    //Двигаемся наискорейшим спуском к точке s
+    if (rx < sx) {
+      rx++;
+    } else if (rx > sx) {
+      rx--;
+    }
+
+    if (ry < sy) {
+      ry++;
+    } else if (ry > sy) {
+      ry--;
+    }
+
+    if (rz < sz) {
+      rz++;
+    } else if (rz > sz) {
+      rz--;
+    }
   }
-  return { random_point: currentPoint, search_points: iterations, calls: iterations };
+
+  return initData;
 }
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * (max + 1));
-}
+//-----------------------------------
+//Пример использования
+const s = { x: 10, y: 10, z: 10 };
+const result = optimizeToMinDistance(s.x, s.y, s.z);
 
-findRandomPoint()
-
-
-function testDistance() {
-  const point1 = { x: 0, y: 0, z: 0 };
-  const point2 = { x: 0, y: 0, z: 5 };
-  const point3 = { x: -2, y: 1, z: -3 };
-
-  console.log(findDistance(point1, point1)); // Расстояние между одной и той же точкой равно 0
-  console.log(findDistance(point1, point2)); // Расстояние между (0, 0, 0) и (3, 4, 5) равно 7.0710678118655...
-  console.log(findDistance(point1, point3)); // Расстояние между (0, 0, 0) и (-2, 1, -3) равно 3.7416573867739...
-}
-
-testDistance();
-
+console.log("Координаты произвольно сгенерированной точки r(x, y, z):", result.random_point);
+console.log("Координаты всех точек, передаваемых в функцию f:", result.search_points);
+console.log("Количество вызовов функции f:", result.calls);

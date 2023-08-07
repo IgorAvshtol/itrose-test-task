@@ -1,10 +1,8 @@
-// Модуль для обработки данных
 const DataProcessor = {
-  // Метод для фильтрации данных по заданным условиям
   filterData(data, conditions) {
-    let filteredData = data.slice(); // Создаем копию данных для избежания изменения исходного массива
+    let filteredData = data.slice();
 
-    // Обработка правила exclude
+    //Обработка правила exclude
     if (conditions.exclude && conditions.exclude.length > 0) {
       filteredData = filteredData.filter(item => {
         return !conditions.exclude.some(condition => {
@@ -14,7 +12,7 @@ const DataProcessor = {
       });
     }
 
-    // Обработка правила include
+    //Обработка правила include
     if (conditions.include && conditions.include.length > 0) {
       filteredData = filteredData.filter(item => {
         return conditions.include.some(condition => {
@@ -24,7 +22,7 @@ const DataProcessor = {
       });
     }
 
-    // Обработка правила sort_by
+    //Обработка правила sort_by
     if (conditions.sort_by && conditions.sort_by.length > 0) {
       filteredData.sort((a, b) => {
         for (const key of conditions.sort_by) {
@@ -41,24 +39,22 @@ const DataProcessor = {
   }
 };
 
-// Входные данные
+//-----------------------------------
+//Пример использования
 const inputData = {
   data: [
-    { "user": "mike@mail.com", "rating": 20, "disabled": false },
-    { "user": "greg@mail.com", "rating": 14, "disabled": false },
-    { "user": "john@mail.com", "rating": 25, "disabled": true }
+    { 'user': 'sasha@tut.by', 'rating': 20, 'disabled': false },
+    { 'user': 'pasha@tut.by', 'rating': 14, 'disabled': false },
+    { 'user': 'roma@tut.by', 'rating': 25, 'disabled': true }
   ],
   condition: {
-    exclude: [{ "disabled": true }],
-    sort_by: ["rating"]
+    exclude: [{ 'disabled': true }],
+    sort_by: ['rating']
   }
 };
 
-// Обработка данных
 const resultData = DataProcessor.filterData(inputData.data, inputData.condition);
 
-// Формирование исходящих данных
 const outputData = { result: resultData };
 
-// Вывод результата
 console.log(outputData);
