@@ -58,6 +58,6 @@ function optimizeToMinDistance(sx, sy, sz) {
 const s = { x: 10, y: 10, z: 10 };
 const result = optimizeToMinDistance(s.x, s.y, s.z);
 
-console.log("Координаты произвольно сгенерированной точки r(x, y, z):", result.random_point);
-console.log("Координаты всех точек, передаваемых в функцию f:", result.search_points);
-console.log("Количество вызовов функции f:", result.calls);
+console.log('Координаты произвольно сгенерированной точки r(x, y, z):', result.random_point);
+console.log('Координаты всех точек, передаваемых в функцию f:', result.search_points);
+console.log('Количество вызовов функции f:', result.calls);
